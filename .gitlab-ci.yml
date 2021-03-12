@@ -6,8 +6,6 @@ stages:
 
 variables:
   DOCKER_IMAGE_TAG: alanhohn/todo
-  DBUSER: todo
-  DBPASS: todo
 
 test:
   stage: test
@@ -27,9 +25,9 @@ test:
       alias: db
   variables:
     POSTGRES_DB: todo
-    POSTGRES_USER: "${DBUSER}"
-    POSTGRES_PASS: "${DBPASS}"
-    DATABASE_URL: "postgres://${DBUSER}:${DBPASS}@db/todo"
+    POSTGRES_USER: todo
+    POSTGRES_PASSWORD: todo
+    DATABASE_URL: "postgres://todo:todo@db/todo"
   script:
     - ./ci-test.sh
 
