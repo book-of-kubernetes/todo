@@ -3,24 +3,12 @@ var prom = require('prom-client'),
     bodyParser = require('body-parser'),
     backend = require('./backend');
 
-var app = express();
+const prefix = process.env.PREFIX || '/';
+const port = Number(process.env.PORT || 5000);
 
-// ----- Parse JSON requests
+console.log(`Todo service listening on port ${port} with prefix ${prefix}`);
 
-app.use(bodyParser.json());
-
-// ----- Allow CORS
-
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE');
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
-
-// ----- Static files for frontend
-
-app.use(express.static('public'))
+var router = express.Router();
 
 // ----- The API implementation
 
@@ -42,7 +30,7 @@ function createTodo(req, data) {
     title: data.title,
     order: data.order,
     completed: data.completed || false,
-    url: req.protocol + '://' + req.get('host') + '/api/' + data.id
+    url: `${req.protocol}://${req.get('host')}{prefix}/api/${data.id}`
   };
 }
 
@@ -52,37 +40,37 @@ function getCreateTodo(req) {
   };
 }
 
-app.get('/api/', function(req, res) {
+router.get('/api/', function(req, res) {
   todos.all(createCallback(res, function(todos) {
     res.send(todos.map(getCreateTodo(req)));
   }));
 });
 
-app.get('/api/:id', function(req, res) {
+router.get('/api/:id', function(req, res) {
   todos.get(req.params.id, createCallback(res, function(todo) {
     res.send(createTodo(req, todo));
   }));
 });
 
-app.post('/api', function(req, res) {
+router.post('/api', function(req, res) {
   todos.create(req.body.title, req.body.order, createCallback(res, function(todo) {
     res.send(createTodo(req, todo));
   }));
 });
 
-app.patch('/api/:id', function(req, res) {
+router.patch('/api/:id', function(req, res) {
   todos.update(req.params.id, req.body, createCallback(res, function(todo) {
     res.send(createTodo(req, todo));
   }));
 });
 
-app.delete('/api/', function(req, res) {
+router.delete('/api/', function(req, res) {
   todos.clear(createCallback(res, function(todos) {
     res.send(todos.map(getCreateTodo(req)));
   }));
 });
 
-app.delete('/api/:id', function(req, res) {
+router.delete('/api/:id', function(req, res) {
   todos.delete(req.params.id, createCallback(res, function(todo) {
     res.send(createTodo(req, todo));
   }));
@@ -91,15 +79,31 @@ app.delete('/api/:id', function(req, res) {
 // ----- Prometheus metrics
 
 prom.collectDefaultMetrics();
-app.get('/metrics', (req, res) => {
+router.get('/metrics', (req, res) => {
 	res.set('Content-Type', prom.register.contentType);
 	res.end(prom.register.metrics());
 });
 
-const port = Number(process.env.PORT || 5000);
+var app = express();
 
-console.log(`Todo service listening on port ${port}`);
+// ----- Parse JSON requests
 
+app.use(bodyParser.json());
+
+// ----- Allow CORS
+
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE');
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
+// ----- Static files for frontend
+
+app.use(prefix, express.static('public'))
+
+app.use(prefix, router);
 app.listen(port);
 
 module.exports = app;

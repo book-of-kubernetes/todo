@@ -24,7 +24,7 @@ $('#api-root input').on('keyup',function(){
 $(function () {
 	'use strict';
 
-  var apiRootUrl = window.location.origin + '/api';
+  var apiRootUrl = window.location.href + 'api';
   if( !apiRootUrl ){
     $("body > *").hide();
     $("#api-root").show();
