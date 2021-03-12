@@ -26,11 +26,12 @@ function createCallback(res, onSuccess) {
 }
 
 function createTodo(req, data) {
+  var apiPath = prefix.endsWith('/') ? `${prefix}api` : `${prefix}/api`;
   return {
     title: data.title,
     order: data.order,
     completed: data.completed || false,
-    url: `${req.protocol}://${req.get('host')}{prefix}/api/${data.id}`
+    url: `${req.protocol}://${req.get('host')}${apiPath}/${data.id}`
   };
 }
 
