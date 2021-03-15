@@ -9,7 +9,7 @@ variables:
 
 test:
   stage: test
-  image: node:10
+  image: node:14
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
