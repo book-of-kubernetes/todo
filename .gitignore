@@ -3,4 +3,5 @@
 /node_modules
 /public/js/vendor
 /public/css/vendor
+/npm-audit.json
 test-results.xml
