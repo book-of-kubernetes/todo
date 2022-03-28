@@ -37,8 +37,8 @@ jobs:
       - name: Database migrations
         run: npm run prestart
         env:
-          DATABASE_URL: postgres://postgres:postgres@postgres/postgres
+          DATABASE_URL: postgres://postgres:postgres@localhost/postgres
       - name: Test
         run: npm test
         env:
-          DATABASE_URL: postgres://postgres:postgres@postgres/postgres
+          DATABASE_URL: postgres://postgres:postgres@localhost/postgres
