@@ -1,0 +1,19 @@
+{
+        "defaultEnv": "pg",
+        "pg": {
+                "driver": "pg",
+                "host": {
+                        "ENV": "PGHOST"
+                },
+                "database": {
+                        "ENV": "PGDATABASE"
+                },
+                "port": "5432",
+                "user": {
+                        "ENV": "PGUSER"
+                },
+                "password": {
+                        "ENV": "PGPASSWORD"
+                }
+        }
+}

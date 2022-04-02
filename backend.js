@@ -1,10 +1,8 @@
 const debug = require('debug')('backend'),
       { Pool } = require('pg');
 
-module.exports = function createTodoBackend(connectionString) {
-  const pool = new Pool({
-    connectionString: connectionString,
-  });
+module.exports = function createTodoBackend(config) {
+  const pool = new Pool(config);
 
   function query(query, params, callback) {
     debug(`Query ${query} with params ${params}`);

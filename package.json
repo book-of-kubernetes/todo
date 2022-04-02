@@ -5,7 +5,7 @@
   "description": "a todo web application to illustrate a devops pipeline",
   "main": "server.js",
   "scripts": {
-    "prestart": "db-migrate up",
+    "prestart": "db-migrate up -e pg",
     "grunt": "grunt",
     "test": "mocha --exit"
   },

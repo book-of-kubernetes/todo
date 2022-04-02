@@ -12,7 +12,12 @@ var router = express.Router();
 
 // ----- The API implementation
 
-var todos = backend(process.env.DATABASE_URL);
+var backendConfig = {};
+if (process.env.DATABASE_URL) {
+  backendConfig.connectionString = process.env.DATABASE_URL;
+}
+
+var todos = backend(backendConfig);
 
 function createCallback(res, onSuccess) {
   return function callback(err, data) {

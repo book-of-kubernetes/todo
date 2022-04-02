@@ -14,6 +14,11 @@ For example, for a local PostgreSQL with a `todo` user / password:
 export DATABASE_URL=postgres://todo:todo@localhost/todo
 ```
 
+You can also set the [standard libpg environment variables][libpg] in
+place of `DATABASE_URL`.
+
+[libpg]:https://www.postgresql.org/docs/9.1/libpq-envars.html
+
 # Provenance
 
 This app is based on three separate repositories:
